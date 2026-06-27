@@ -1,0 +1,13 @@
+{
+  "name": "MPM Pendientes",
+  "short_name": "Pendientes",
+  "description": "Gestión de pendientes de mantenimiento industrial",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#141B24",
+  "theme_color": "#2C3E50",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
