@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0D1117"/>
+  <rect x="30" y="30" width="452" height="452" rx="80" fill="#161B22"/>
+  <circle cx="256" cy="236" r="140" fill="#21262D"/>
+  <text x="256" y="310" font-family="-apple-system,Arial,sans-serif" font-size="210" font-weight="900" text-anchor="middle" dominant-baseline="auto" fill="#E63946">M</text>
+  <circle cx="376" cy="136" r="60" fill="#E63946"/>
+  <text x="376" y="155" font-family="Arial,sans-serif" font-size="46" font-weight="700" text-anchor="middle" fill="#F0F6FC">PM</text>
+</svg>
