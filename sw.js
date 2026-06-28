@@ -1,4 +1,4 @@
-const CACHE = 'mpm-v2';
+const CACHE = 'mpm-v3';
 const ASSETS = [
   './index.html',
   './manifest.json',
