@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generar íconos MPM</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 32px; background: #f5f5f5; }
+    h2 { color: #1565C0; margin-bottom: 8px; }
+    p  { color: #555; margin-bottom: 24px; }
+    canvas { border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,.15); margin-right: 24px; }
+    .row { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; }
+    button {
+      display: block; margin-top: 12px; padding: 12px 24px;
+      background: #1565C0; color: #fff; border: none;
+      border-radius: 8px; font-size: 15px; font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover { background: #0D47A1; }
+    .label { font-size: 13px; color: #777; margin-top: 6px; }
+    .instr {
+      background: #E3F2FD; border: 1.5px solid #90CAF9;
+      border-radius: 10px; padding: 16px 20px;
+      font-size: 14px; color: #0D47A1; line-height: 1.6;
+    }
+    ol { margin: 8px 0 0 18px; }
+  </style>
+</head>
+<body>
+  <h2>Generador de íconos — MPM Pendientes</h2>
+  <p>Abre este archivo en Chrome, haz clic en los botones para descargar los íconos PNG.</p>
+
+  <div class="instr">
+    <strong>Instrucciones:</strong>
+    <ol>
+      <li>Descarga <strong>icon-192.png</strong> → colócalo en <code>mpm-pendientes/icons/</code></li>
+      <li>Descarga <strong>icon-512.png</strong> → colócalo en <code>mpm-pendientes/icons/</code></li>
+      <li>La carpeta <code>icons/</code> ya debe existir dentro de tu proyecto.</li>
+    </ol>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div>
+      <canvas id="c192" width="192" height="192"></canvas>
+      <div class="label">192 × 192 px</div>
+      <button onclick="download('c192','icon-192.png')">⬇ Descargar icon-192.png</button>
+    </div>
+    <div>
+      <canvas id="c512" width="512" height="512"></canvas>
+      <div class="label">512 × 512 px</div>
+      <button onclick="download('c512','icon-512.png')">⬇ Descargar icon-512.png</button>
+    </div>
+  </div>
+
+  <script>
+    function drawIcon(canvasId, size) {
+      const canvas = document.getElementById(canvasId);
+      const ctx    = canvas.getContext('2d');
+      const r      = size * 0.197; // corner radius ratio
+
+      // Background
+      ctx.fillStyle = '#1565C0';
+      roundRect(ctx, 0, 0, size, size, r);
+      ctx.fill();
+
+      // MPM text
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = `900 ${size * 0.24}px "Arial Black", Arial, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('MPM', size / 2, size * 0.44);
+
+      // Subtitle
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.font = `600 ${size * 0.105}px Arial, sans-serif`;
+      ctx.letterSpacing = `${size * 0.005}px`;
+      ctx.fillText('Pendientes', size / 2, size * 0.63);
+
+      // Divider line
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.fillRect(size * 0.23, size * 0.7, size * 0.54, size * 0.016);
+
+      // Bottom dot
+      ctx.beginPath();
+      ctx.arc(size / 2, size * 0.79, size * 0.042, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(size / 2, size * 0.79, size * 0.021, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.fill();
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function download(canvasId, filename) {
+      const canvas = document.getElementById(canvasId);
+      const a = document.createElement('a');
+      a.download = filename;
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    }
+
+    drawIcon('c192', 192);
+    drawIcon('c512', 512);
+  </script>
+</body>
+</html>
