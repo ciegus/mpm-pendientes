@@ -36,7 +36,8 @@ self.addEventListener('fetch', e => {
       fetch(e.request)
         .then(res => {
           if (res && res.status === 200) {
-            caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+            const clone = res.clone(); // clonar antes de cualquier operación async
+            caches.open(CACHE).then(c => c.put(e.request, clone));
           }
           return res;
         })
@@ -51,7 +52,8 @@ self.addEventListener('fetch', e => {
       if (cached) return cached;
       return fetch(e.request).then(res => {
         if (res && res.status === 200 && res.type === 'basic') {
-          caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+          const clone = res.clone(); // clonar antes de cualquier operación async
+          caches.open(CACHE).then(c => c.put(e.request, clone));
         }
         return res;
       });
