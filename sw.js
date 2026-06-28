@@ -1,10 +1,9 @@
-const CACHE = 'mpm-v8';
+const CACHE = 'mpm-v4';
 const ASSETS = [
   './index.html',
-  './styles.css',
-  './app.js',
   './manifest.json',
-  './icon.svg',
+  './icon-192.svg',
+  './icon-512.svg'
 ];
 
 self.addEventListener('install', e => {
@@ -19,44 +18,47 @@ self.addEventListener('activate', e => {
     caches.keys()
       .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
+      .then(() => {
+        // Notifica a todas las pestañas abiertas para que recarguen
+        return self.clients.matchAll({ type: 'window' }).then(clients => {
+          clients.forEach(client => client.postMessage({ type: 'SW_UPDATED' }));
+        });
+      })
   );
 });
 
 self.addEventListener('fetch', e => {
-  // Never intercept API calls (Google Apps Script)
-  if (e.request.url.includes('script.google.com')) return;
   if (e.request.method !== 'GET') return;
-
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return;
 
-  // Network-first for index.html
+  // Network-first para index.html — siempre intenta traer la versión más reciente
   if (url.pathname === '/' || url.pathname.endsWith('/index.html')) {
     e.respondWith(
       fetch(e.request)
-        .then(res => {
-          if (res && res.status === 200) {
-            const clone = res.clone(); // clonar antes de cualquier operación async
+        .then(response => {
+          if (response && response.status === 200) {
+            const clone = response.clone();
             caches.open(CACHE).then(c => c.put(e.request, clone));
           }
-          return res;
+          return response;
         })
         .catch(() => caches.match('./index.html'))
     );
     return;
   }
 
-  // Cache-first for static assets
+  // Cache-first para el resto de assets estáticos
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;
-      return fetch(e.request).then(res => {
-        if (res && res.status === 200 && res.type === 'basic') {
-          const clone = res.clone(); // clonar antes de cualquier operación async
+      return fetch(e.request).then(response => {
+        if (response && response.status === 200 && response.type === 'basic') {
+          const clone = response.clone();
           caches.open(CACHE).then(c => c.put(e.request, clone));
         }
-        return res;
-      });
+        return response;
+      }).catch(() => caches.match('./index.html'));
     })
   );
 });
