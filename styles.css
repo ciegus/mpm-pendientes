@@ -10,6 +10,9 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* El atributo hidden siempre gana, sin importar el display del selector */
+[hidden] { display: none !important; }
+
 :root {
   --primary:       #1565C0;
   --primary-dark:  #0D47A1;
