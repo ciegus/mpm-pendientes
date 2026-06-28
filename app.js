@@ -63,7 +63,7 @@ function showToast(msg, type = 'info') {
 }
 
 function showLoading(show) {
-  document.getElementById('loading-overlay').hidden = !show;
+  document.getElementById('loading-overlay').classList.toggle('visible', show);
 }
 
 function esc(s) {
@@ -451,12 +451,12 @@ async function cambiarEstado(nuevoEstado) {
 
 function openBitacoraModal() {
   document.getElementById('bitacora-texto').value = '';
-  document.getElementById('modal-bitacora').hidden = false;
+  document.getElementById('modal-bitacora').classList.add('visible');
   setTimeout(() => document.getElementById('bitacora-texto').focus(), 100);
 }
 
 function closeBitacoraModal() {
-  document.getElementById('modal-bitacora').hidden = true;
+  document.getElementById('modal-bitacora').classList.remove('visible');
 }
 
 async function submitBitacora() {

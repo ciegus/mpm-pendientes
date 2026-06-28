@@ -1,4 +1,4 @@
-const CACHE = 'mpm-v7';
+const CACHE = 'mpm-v8';
 const ASSETS = [
   './index.html',
   './styles.css',
