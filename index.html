@@ -34,6 +34,16 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .hdr-title .sub{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ibtn{width:40px;height:40px;border:none;background:rgba(255,255,255,.1);color:var(--text);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background var(--tr);flex-shrink:0}
 .ibtn:active{background:rgba(255,255,255,.2)}
+.ibtn.active{background:rgba(230,57,70,.25);color:var(--red)}
+
+/* SEARCH BAR */
+.search-bar{background:var(--navy);border-bottom:1px solid var(--border);max-height:0;overflow:hidden;transition:max-height .25s ease}
+.search-bar.open{max-height:58px}
+.search-inner{padding:8px 12px}
+.search-inner input{width:100%;background:var(--surf2);border:1.5px solid var(--border);color:var(--text);padding:9px 14px 9px 36px;border-radius:var(--rs);font-size:15px;font-family:inherit;transition:border-color var(--tr)}
+.search-inner input:focus{outline:none;border-color:var(--red)}
+.search-wrap{position:relative}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
 
 /* STATS */
 .stats{display:flex;gap:8px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;background:var(--surf);border-bottom:1px solid var(--border)}
@@ -99,13 +109,27 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .sdot.en_proceso{background:var(--s-proc)}
 .sdot.esperando{background:var(--s-esp)}
 .sdot.cerrado{background:var(--s-cerr)}
-.cmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cmeta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .mi{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--muted)}
 .pbadge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px}
 .pbadge.critico{background:#E63946;color:#F0F6FC}
 .pbadge.medio{background:#F4A261;color:#161B22}
 .pbadge.bajo{background:#00B4D8;color:#161B22}
 .ov{color:var(--c-crit)!important;font-weight:600}
+/* DAYS LABEL */
+.dl{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.dl.ok{background:rgba(255,255,255,.06);color:var(--muted)}
+.dl.warn{background:rgba(244,162,97,.18);color:#F4A261}
+.dl.venc{background:rgba(230,57,70,.18);color:#E63946}
+/* QUICK STATUS BUTTON */
+.qs-btn{width:36px;flex-shrink:0;border:none;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background var(--tr);border-left:1px solid var(--border);padding:0}
+.qs-btn:active{background:var(--surf2)}
+.qs-menu{position:fixed;background:var(--surf2);border:1px solid var(--border);border-radius:var(--rs);box-shadow:0 8px 28px rgba(0,0,0,.6);z-index:500;min-width:170px;overflow:hidden;display:none}
+.qs-menu.open{display:block}
+.qs-item{padding:13px 16px;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);color:var(--text2);transition:background var(--tr)}
+.qs-item:last-child{border-bottom:none}
+.qs-item:active{background:var(--navy2)}
+.qs-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 
 /* FAB */
 .fab{position:fixed;bottom:calc(22px + var(--sab));right:18px;width:56px;height:56px;border-radius:50%;background:#E63946;color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(230,57,70,.6);transition:transform var(--tr);z-index:20}
@@ -176,6 +200,7 @@ input.drop-open{border-radius:var(--rs) var(--rs) 0 0!important;border-color:var
 .drl{font-size:12px;color:var(--muted);width:90px;flex-shrink:0;padding-top:1px}
 .drv{font-size:14px;color:var(--text);flex:1}
 .notes{font-size:14px;color:var(--text2);line-height:1.6;background:var(--surf2);padding:12px;border-radius:var(--rs);white-space:pre-wrap;word-break:break-word}
+.notes.cierre{border-left:3px solid #3FB950}
 .dbtn-row{display:flex;gap:8px;margin-top:8px}
 .dbtn-row .btn{margin:0}
 
@@ -198,6 +223,20 @@ input.drop-open{border-radius:var(--rs) var(--rs) 0 0!important;border-color:var
 .eq-block-hdr{display:flex;align-items:center;gap:8px}
 .eq-block-name{flex:1;font-size:15px;font-weight:700}
 
+/* CLOSE NOTE MODAL */
+.cm-wrap{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.65);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity var(--tr)}
+.cm-wrap.open{opacity:1;pointer-events:auto}
+.cm-box{background:var(--surf);border-radius:var(--r);padding:22px 20px;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,.7)}
+.cm-box h3{font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.cm-box p{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.4}
+.cm-box textarea{width:100%;background:var(--surf2);border:1.5px solid var(--border);color:var(--text);padding:11px 13px;border-radius:var(--rs);font-size:14px;font-family:inherit;min-height:80px;resize:none;line-height:1.5}
+.cm-box textarea:focus{outline:none;border-color:#3FB950}
+.cm-btns{display:flex;gap:8px;margin-top:14px}
+.cm-btns button{flex:1;padding:12px;border-radius:var(--rs);border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.cm-confirm{background:#3FB950;color:#161B22}
+.cm-skip{background:var(--surf2);color:var(--text2)}
+.cm-confirm:active,.cm-skip:active{opacity:.8}
+
 /* TOAST */
 .toast{position:fixed;bottom:calc(78px + var(--sab));left:50%;transform:translateX(-50%) translateY(12px);background:var(--navy2);color:var(--text);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;box-shadow:var(--shadow);opacity:0;transition:all .25s ease;pointer-events:none;white-space:nowrap;z-index:999}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -210,9 +249,21 @@ input.drop-open{border-radius:var(--rs) var(--rs) 0 0!important;border-color:var
       <h1>MPM Pendientes</h1>
       <div class="sub" id="subtitle">Cargando...</div>
     </div>
+    <button class="ibtn" id="btn-search" title="Buscar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
     <button class="ibtn" id="btn-settings" title="Equipos y secciones">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
     </button>
+  </div>
+
+  <div class="search-bar" id="search-bar">
+    <div class="search-inner">
+      <div class="search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" placeholder="Buscar descripción, equipo, sección, responsable...">
+      </div>
+    </div>
   </div>
 
   <div class="stats" id="stats"></div>
@@ -326,6 +377,27 @@ input.drop-open{border-radius:var(--rs) var(--rs) 0 0!important;border-color:var
   </div>
 </div>
 
+<!-- QUICK STATUS MENU (floating) -->
+<div id="qs-menu" class="qs-menu">
+  <div class="qs-item" onclick="qsSelect('pendiente')"><span class="qs-dot" style="background:#E63946"></span>Pendiente</div>
+  <div class="qs-item" onclick="qsSelect('en_proceso')"><span class="qs-dot" style="background:#F4A261"></span>En Proceso</div>
+  <div class="qs-item" onclick="qsSelect('esperando')"><span class="qs-dot" style="background:#8B949E"></span>Esperando</div>
+  <div class="qs-item" onclick="qsSelect('cerrado')"><span class="qs-dot" style="background:#3FB950"></span>Cerrado</div>
+</div>
+
+<!-- CLOSE NOTE MODAL -->
+<div class="cm-wrap" id="close-modal">
+  <div class="cm-box">
+    <h3>✓ Cerrar pendiente</h3>
+    <p>Agrega una nota de cierre opcional (resolución, acción tomada, observaciones).</p>
+    <textarea id="close-note" placeholder="Ej: Se reemplazó rodamiento 6205 2RS. Máquina operando normal."></textarea>
+    <div class="cm-btns">
+      <button class="cm-confirm" onclick="confirmClose()">Guardar nota</button>
+      <button class="cm-skip" onclick="skipClose()">Sin nota</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -341,7 +413,7 @@ const SBADGE = {
   cerrado:   {bg:'#3FB950', color:'#161B22'}
 };
 
-let S = { pendientes:[], equipos:[], secciones:{}, fEq:'todos', fSt:'todos', editId:null, detId:null };
+let S = { pendientes:[], equipos:[], secciones:{}, fEq:'todos', fSt:'todos', search:'', editId:null, detId:null };
 
 function load() {
   try {
@@ -367,6 +439,19 @@ function fmtDate(d) {
   return `${+day} ${['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][+m-1]} ${y}`;
 }
 function overdue(fl,st) { return fl && st!=='cerrado' && new Date(fl+'T00:00:00')<new Date(new Date().toDateString()); }
+
+function daysLabel(fl, st) {
+  if (!fl || st === 'cerrado') return null;
+  const now = new Date(new Date().toDateString());
+  const d = new Date(fl + 'T00:00:00');
+  const diff = Math.round((d - now) / 86400000);
+  if (diff === 0) return {text:'Hoy', cls:'warn'};
+  if (diff === 1) return {text:'Mañana', cls:'warn'};
+  if (diff > 0) return {text:`${diff} días`, cls:'ok'};
+  if (diff === -1) return {text:'Vencido 1 día', cls:'venc'};
+  return {text:`Vencido ${Math.abs(diff)} días`, cls:'venc'};
+}
+
 function toast(msg,ms=2200) {
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
@@ -375,10 +460,18 @@ function toast(msg,ms=2200) {
 
 // ── RENDER ────────────────────────────────────────────────
 function getFiltered() {
+  const q = S.search.trim().toLowerCase();
   return S.pendientes.filter(p=>{
     const eq = S.fEq==='todos' || p.equipo===S.fEq;
     const st = S.fSt==='todos' || p.estatus===S.fSt;
-    return eq && st;
+    if (!eq || !st) return false;
+    if (!q) return true;
+    return (
+      (p.descripcion||'').toLowerCase().includes(q) ||
+      (p.equipo||'').toLowerCase().includes(q) ||
+      (p.seccion||'').toLowerCase().includes(q) ||
+      (p.responsable||'').toLowerCase().includes(q)
+    );
   });
 }
 
@@ -389,8 +482,9 @@ function renderStats() {
   const proc = vis.filter(p=>p.estatus==='en_proceso').length;
   const esp  = vis.filter(p=>p.estatus==='esperando').length;
   const venc = vis.filter(p=>overdue(p.fechaLimite,p.estatus)).length;
+  const srch = S.search.trim() ? ` · "${S.search.trim()}"` : '';
   document.getElementById('subtitle').textContent =
-    `${vis.length} pendiente${vis.length!==1?'s':''}${S.fEq!=='todos'?' · '+S.fEq:''}`;
+    `${vis.length} pendiente${vis.length!==1?'s':''}${S.fEq!=='todos'?' · '+S.fEq:''}${srch}`;
   document.getElementById('stats').innerHTML =
     `<div class="stat"><div class="stat-n">${all.length}</div><div class="stat-l">Total</div></div>`+
     `<div class="stat crit"><div class="stat-n">${crit}</div><div class="stat-l">Críticos</div></div>`+
@@ -445,7 +539,11 @@ function renderList() {
       html+=`<div class="sec-grp"><div class="sec-hdr"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>${esc(sec)}<span class="sec-cnt">${sorted.length}</span></div>`;
       sorted.forEach(p=>{
         const od=overdue(p.fechaLimite,p.estatus);
-        html+=`<div class="pcard" data-id="${p.id}"><div class="pbar ${p.prioridad}"></div><div class="cbody"><div class="ctop"><div class="cdesc ${p.estatus==='cerrado'?'done':''}">${esc(p.descripcion)}</div><div class="sdot ${p.estatus}"></div></div><div class="cmeta"><span class="pbadge ${p.prioridad}">${PLABS[p.prioridad]}</span>${p.fechaLimite?`<span class="mi ${od?'ov':''}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${od?'⚠ ':''}${fmtDate(p.fechaLimite)}</span>`:''} ${p.responsable?`<span class="mi"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${esc(p.responsable)}</span>`:''}</div></div></div>`;
+        const dl=daysLabel(p.fechaLimite,p.estatus);
+        const dlHtml=dl?`<span class="dl ${dl.cls}">${dl.text}</span>`:'';
+        const dateHtml=p.fechaLimite?`<span class="mi ${od?'ov':''}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${fmtDate(p.fechaLimite)}</span>`:'';
+        const respHtml=p.responsable?`<span class="mi"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${esc(p.responsable)}</span>`:'';
+        html+=`<div class="pcard" data-id="${p.id}"><div class="pbar ${p.prioridad}"></div><div class="cbody"><div class="ctop"><div class="cdesc ${p.estatus==='cerrado'?'done':''}">${esc(p.descripcion)}</div><div class="sdot ${p.estatus}"></div></div><div class="cmeta"><span class="pbadge ${p.prioridad}">${PLABS[p.prioridad]}</span>${dateHtml}${dlHtml}${respHtml}</div></div><button class="qs-btn" data-qsid="${p.id}" title="Cambiar estatus"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button></div>`;
       });
       html+='</div>';
     });
@@ -453,10 +551,50 @@ function renderList() {
   });
   el.innerHTML=html;
   el.querySelectorAll('.eq-hdr').forEach(h=>h.addEventListener('click',()=>h.closest('.eq-grp').classList.toggle('col')));
-  el.querySelectorAll('.pcard').forEach(c=>c.addEventListener('click',()=>openDetail(c.dataset.id)));
+  el.querySelectorAll('.pcard').forEach(c=>c.addEventListener('click',e=>{
+    if(e.target.closest('.qs-btn')) return;
+    openDetail(c.dataset.id);
+  }));
+  el.querySelectorAll('.qs-btn').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();
+    openQsMenu(e, b.dataset.qsid);
+  }));
 }
 
 function renderAll() { renderStats(); renderFilters(); renderList(); }
+
+// ── QUICK STATUS MENU ──────────────────────────────────────
+let _qsId = null;
+
+function openQsMenu(e, id) {
+  _qsId = id;
+  const menu = document.getElementById('qs-menu');
+  const btn = e.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  const menuW = 170, menuH = 208;
+  let top = rect.bottom + 4;
+  let left = rect.right - menuW;
+  if (top + menuH > window.innerHeight - 10) top = rect.top - menuH - 4;
+  if (left < 8) left = 8;
+  menu.style.top = top + 'px';
+  menu.style.left = left + 'px';
+  menu.classList.add('open');
+}
+
+function qsSelect(est) {
+  document.getElementById('qs-menu').classList.remove('open');
+  if (!_qsId) return;
+  qSt(_qsId, est);
+  _qsId = null;
+}
+
+document.addEventListener('click', e => {
+  const menu = document.getElementById('qs-menu');
+  if (menu.classList.contains('open') && !menu.contains(e.target)) {
+    menu.classList.remove('open');
+    _qsId = null;
+  }
+});
 
 // ── DETAIL ──────────────────────────────────────────────
 function openDetail(id) {
@@ -476,8 +614,10 @@ function openDetail(id) {
       <div class="drow"><span class="drl">Responsable</span><span class="drv">${esc(p.responsable)||'—'}</span></div>
       <div class="drow"><span class="drl">Fecha límite</span><span class="drv ${od?'ov':''}">${p.fechaLimite?(od?'⚠ ':'')+fmtDate(p.fechaLimite):'—'}</span></div>
       <div class="drow"><span class="drl">Creado</span><span class="drv">${fmtDate(p.fechaCreacion)}</span></div>
+      ${p.fechaCierre?`<div class="drow"><span class="drl">Fecha cierre</span><span class="drv" style="color:#3FB950">${fmtDate(p.fechaCierre)}</span></div>`:''}
     </div>
     ${p.notas?`<div class="dsec"><h3>Notas</h3><div class="notes">${esc(p.notas)}</div></div>`:''}
+    ${p.notaCierre?`<div class="dsec"><h3>Nota de Cierre</h3><div class="notes cierre">${esc(p.notaCierre)}</div></div>`:''}
     <div style="margin-top:24px">
       <button class="btn btn-p" onclick="openEditForm('${p.id}')">✏️ Editar Pendiente</button>
       <div class="dbtn-row">
@@ -489,12 +629,69 @@ function openDetail(id) {
   document.getElementById('det-ov').classList.add('open');
 }
 
-function qSt(id,est) {
+function qSt(id, est) {
   const p=S.pendientes.find(x=>x.id===id); if(!p) return;
-  p.estatus=est; p.fechaActualizacion=today(); save(); renderList(); renderStats();
-  openDetail(id);
-  toast(est==='cerrado'?'Pendiente cerrado ✓':'Estatus actualizado');
+  if (est === 'cerrado' && p.estatus !== 'cerrado') {
+    openCloseModal(id, 'full');
+    return;
+  }
+  p.estatus=est; p.fechaActualizacion=today();
+  // If reopening, clear close data
+  if (est !== 'cerrado') { p.fechaCierre=null; p.notaCierre=null; }
+  save(); renderList(); renderStats();
+  if (S.detId===id) openDetail(id);
+  toast(est==='pendiente'?'Reabierto':'Estatus actualizado');
 }
+
+// ── CLOSE NOTE MODAL ──────────────────────────────────────
+let _closeId = null;
+let _closeMode = 'full';
+
+function openCloseModal(id, mode) {
+  _closeId = id;
+  _closeMode = mode || 'full';
+  document.getElementById('close-note').value = '';
+  document.getElementById('close-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('close-note').focus(), 300);
+}
+
+function confirmClose() {
+  if (!_closeId) return;
+  const p = S.pendientes.find(x=>x.id===_closeId);
+  if (p) {
+    p.estatus = 'cerrado';
+    p.fechaCierre = today();
+    const note = document.getElementById('close-note').value.trim();
+    p.notaCierre = note || null;
+    p.fechaActualizacion = today();
+    save(); renderAll();
+    if (S.detId===_closeId) openDetail(_closeId);
+  }
+  document.getElementById('close-modal').classList.remove('open');
+  toast('Pendiente cerrado ✓');
+  _closeId = null;
+}
+
+function skipClose() {
+  if (!_closeId) return;
+  const p = S.pendientes.find(x=>x.id===_closeId);
+  if (p) {
+    p.estatus = 'cerrado';
+    p.fechaCierre = today();
+    p.notaCierre = null;
+    p.fechaActualizacion = today();
+    save(); renderAll();
+    if (S.detId===_closeId) openDetail(_closeId);
+  }
+  document.getElementById('close-modal').classList.remove('open');
+  toast('Pendiente cerrado ✓');
+  _closeId = null;
+}
+
+// Close modal on outside click
+document.getElementById('close-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('close-modal')) skipClose();
+});
 
 // ── COMBO ────────────────────────────────────────────────
 function buildDrop(inp, drop, items, onSelect) {
@@ -587,31 +784,42 @@ document.getElementById('pform').addEventListener('submit',e=>{
   const seccion=document.getElementById('f-sec').value.trim();
   if(!desc){ toast('La descripción es requerida'); return; }
   if(!equipo){ toast('El equipo es requerido'); document.getElementById('f-eq').focus(); return; }
-  // Auto-crear equipo si es nuevo
   if(!S.equipos.includes(equipo)){
     S.equipos.push(equipo);
     if(!S.secciones[equipo]) S.secciones[equipo]=[];
   }
-  // Auto-crear sección si es nueva
   if(seccion && !(S.secciones[equipo]||[]).includes(seccion)){
     if(!S.secciones[equipo]) S.secciones[equipo]=[];
     S.secciones[equipo].push(seccion);
   }
+  const newEst = getOpt('est')||'pendiente';
+  const prevEst = S.editId ? (S.pendientes.find(x=>x.id===S.editId)||{}).estatus : null;
+  const isClosing = newEst === 'cerrado' && prevEst !== 'cerrado';
   const d={
     descripcion:desc, equipo, seccion,
-    prioridad:getOpt('prio')||'critico', estatus:getOpt('est')||'pendiente',
+    prioridad:getOpt('prio')||'critico', estatus:newEst,
     fechaLimite:document.getElementById('f-fecha').value,
     responsable:document.getElementById('f-resp').value.trim(),
     notas:document.getElementById('f-notas').value.trim()
   };
+  let savedId;
   if(S.editId){
     const i=S.pendientes.findIndex(x=>x.id===S.editId);
-    if(i!==-1){ S.pendientes[i]={...S.pendientes[i],...d,fechaActualizacion:today()}; toast('Pendiente actualizado ✓'); }
+    if(i!==-1){
+      S.pendientes[i]={...S.pendientes[i],...d,fechaActualizacion:today()};
+      if(isClosing) S.pendientes[i].fechaCierre=today();
+      savedId=S.editId;
+      toast('Pendiente actualizado ✓');
+    }
   } else {
-    S.pendientes.unshift({id:uid(),...d,fechaCreacion:today(),fechaActualizacion:today()});
+    const newP={id:uid(),...d,fechaCreacion:today(),fechaActualizacion:today()};
+    if(isClosing) newP.fechaCierre=today();
+    S.pendientes.unshift(newP);
+    savedId=newP.id;
     toast('Pendiente creado ✓');
   }
   save(); closeForm(); renderAll();
+  if(isClosing && savedId) openCloseModal(savedId, 'note-only');
 });
 
 document.getElementById('form-del').addEventListener('click',()=>{
@@ -626,6 +834,23 @@ document.getElementById('form-cancel').addEventListener('click',closeForm);
 document.getElementById('form-bg').addEventListener('click',closeForm);
 document.getElementById('det-back').addEventListener('click',()=>document.getElementById('det-ov').classList.remove('open'));
 document.getElementById('det-edit').addEventListener('click',()=>{ if(S.detId) openEditForm(S.detId); });
+
+// ── SEARCH ───────────────────────────────────────────────
+document.getElementById('btn-search').addEventListener('click',()=>{
+  const bar=document.getElementById('search-bar');
+  const btn=document.getElementById('btn-search');
+  const inp=document.getElementById('search-input');
+  const isOpen=bar.classList.toggle('open');
+  btn.classList.toggle('active', isOpen);
+  if(isOpen){
+    setTimeout(()=>inp.focus(),260);
+  } else {
+    inp.value=''; S.search=''; renderAll();
+  }
+});
+document.getElementById('search-input').addEventListener('input',e=>{
+  S.search=e.target.value; renderList(); renderStats();
+});
 
 // ── SETTINGS ────────────────────────────────────────────
 function renderSettings() {
@@ -648,7 +873,6 @@ function renderSettings() {
   const el=document.getElementById('set-content');
   el.innerHTML=html;
 
-  // events
   el.querySelectorAll('[data-deq]').forEach(b=>b.addEventListener('click',()=>{
     const eq=b.dataset.deq, c=S.pendientes.filter(p=>p.equipo===eq).length;
     if(!confirm(`¿Eliminar equipo "${eq}"?${c?` Tiene ${c} pendiente(s) que quedarán sin equipo.`:''}`)) return;
